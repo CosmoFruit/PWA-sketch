@@ -11,7 +11,8 @@ export const environment = {
     projectId: 'mypwa-748d2',
     storageBucket: 'mypwa-748d2.appspot.com',
     messagingSenderId: '703500333535',
-  }
+  },
+  flag: false
 };
 
 /*
