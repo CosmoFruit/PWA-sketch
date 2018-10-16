@@ -29,3 +29,19 @@ h1.example-app-name {
      `<body>` to be our scrolling element for mobile layouts. */
   flex: 1 0 auto;
 }
+
+.example-toolbar,
+.user {
+  display: flex;
+  justify-content: space-between;
+}
+
+.user {
+  p {
+    margin: 0;
+  }
+
+  button {
+    margin-left:  1rem;
+  }
+}
