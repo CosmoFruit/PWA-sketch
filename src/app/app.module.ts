@@ -10,12 +10,13 @@ import { MaterialModule }           from './material/material.module';
 import { AngularFireModule }        from '@angular/fire';
 import { AngularFireAuthModule }    from '@angular/fire/auth';
 import { AngularFireStorageModule } from '@angular/fire/storage';
-import { AngularFirestore }         from '@angular/fire/firestore';
-import { UserProfileComponent }     from './user-profile/user-profile.component';
-import { MeetingAddComponent }      from './meeting-add/meeting-add.component';
-import { MeetingInfoComponent }     from './meeting-info/meeting-info.component';
-import { MeetingSnippetComponent } from './meeting-snippet/meeting-snippet.component';
-import { MeetingsListComponent } from './meetings-list/meetings-list.component';
+import { AngularFirestore }                 from '@angular/fire/firestore';
+import { UserProfileComponent }             from './user-profile/user-profile.component';
+import { MeetingAddComponent }              from './meeting-add/meeting-add.component';
+import { MeetingInfoComponent }             from './meeting-info/meeting-info.component';
+import { MeetingSnippetComponent }          from './meeting-snippet/meeting-snippet.component';
+import { MeetingsListComponent }            from './meetings-list/meetings-list.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,8 @@ import { MeetingsListComponent } from './meetings-list/meetings-list.component';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     MaterialModule,

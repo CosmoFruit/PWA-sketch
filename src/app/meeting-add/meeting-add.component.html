@@ -1,3 +1,54 @@
-<p>
-  meeting-add works!
-</p>
+<div class="page-container">
+  <h1>Создание встречи</h1>
+  <div class="row">
+    <div class="col1"
+         *ngIf="(user$ | async) as user">
+      <mat-form-field>
+        <input matInput placeholder="Организатор" [value]="user.displayName" disabled>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Тел. для связи" [value]="user.phoneNumber" disabled>
+      </mat-form-field>
+    </div>
+
+    <form class="col1"
+          [formGroup]="meetingForm">
+      <mat-form-field>
+        <input matInput
+               placeholder="Город"
+               formControlName="city">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput
+               placeholder="Адрес встречи"
+               formControlName="address">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput
+               placeholder="Время встречи"
+               formControlName="time">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput
+               placeholder="Сколько комплектов будет"
+               formControlName="gameKitsCount">
+      </mat-form-field>
+
+      <mat-form-field>
+        <textarea matInput
+                  placeholder="Коментарий"
+                  formControlName="comment"></textarea>
+      </mat-form-field>
+
+      <button mat-raised-button
+              (click)="submit()">
+        Создать
+      </button>
+    </form>
+  </div>
+
+</div>

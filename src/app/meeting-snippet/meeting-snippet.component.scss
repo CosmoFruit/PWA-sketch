@@ -1,0 +1,14 @@
+:host {
+  width: 20rem;
+
+  mat-card-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  mat-card-footer {
+    padding: 0 1rem;
+    color: lightgray;
+    font-size: 14px;
+  }
+}

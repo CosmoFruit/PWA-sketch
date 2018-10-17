@@ -1,3 +1,17 @@
-<p>
-  meetings-list works!
-</p>
+<div class="page-container">
+  <div class="meetings-list"
+       *ngIf="(items$ | async)?.length; else EmptyList">
+    <app-meeting-snippet class="meeting-snippet"
+                         *ngFor="let data of (items$ | async)"
+                         [item]="data"></app-meeting-snippet>
+  </div>
+
+  <ng-template #EmptyList>
+    <div class="empty">
+      <p>Встреч не запланировано.</p>
+      <a routerLink="/meeting/add">
+        Вы можете создать новую встречу
+      </a>
+    </div>
+  </ng-template>
+</div>

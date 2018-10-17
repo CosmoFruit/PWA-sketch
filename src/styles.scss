@@ -14,3 +14,10 @@ body {
   font-size: 8pt;
   float: right;
 }
+
+.page-container {
+  margin: 1rem auto 1rem;
+  max-width: 80rem;
+  min-width: 20rem;
+  width: 100%;
+}

@@ -49,12 +49,23 @@
            [routerLinkActive]="'active'">
           Прошедшие
         </a>
+
         <a mat-list-item
            routerLink="/"
            [queryParams]="{ filter: 'me' }"
            [routerLinkActive]="'active'">
           Мои
         </a>
+
+        <mat-divider></mat-divider>
+
+        <a mat-list-item
+           routerLink="/meeting/add"
+           [routerLinkActive]="'active'">
+          Создать встречу
+        </a>
+
+        <mat-divider></mat-divider>
 
         <a mat-list-item
            routerLink="/user"
@@ -64,7 +75,7 @@
       </mat-nav-list>
     </mat-sidenav>
 
-    <mat-sidenav-content>
+    <mat-sidenav-content class="container">
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>

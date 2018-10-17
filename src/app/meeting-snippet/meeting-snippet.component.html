@@ -1,3 +1,23 @@
-<p>
-  meeting-snippet works!
-</p>
+<mat-card>
+  <mat-card-title> {{ item.time}}</mat-card-title>
+  <mat-card-subtitle>{{ item.city}}, {{ item.address}} </mat-card-subtitle>
+  <mat-card-content>
+    <p>Организатор: {{ item.author.displayName }}</p>
+    <button mat-raised-button>
+      <mat-icon>phone</mat-icon>
+      Показать номер для связи
+    </button>
+    <p>Количество комплектов на встрече: {{ item.gameKitsCount }}</p>
+    <p>Участники: {{ item.members.length }} </p>
+    <p>Комментарий организатора: {{ item.comment }}</p>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-raised-button
+            color="primary">Прийду</button>
+  </mat-card-actions>
+
+  <mat-card-footer>
+
+  </mat-card-footer>
+</mat-card>

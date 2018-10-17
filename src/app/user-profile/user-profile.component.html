@@ -1,3 +1,32 @@
-<p>
-  user-profile works!
-</p>
+<div class="page-container">
+  <h1>Настройки профиля</h1>
+  <form [formGroup]="userForm">
+    <mat-form-field>
+      <input matInput
+             placeholder="Имя"
+              formControlName="firstName">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput
+             placeholder="Фамилия"
+             formControlName="lastName">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput
+             placeholder="Телефон для связи"
+             formControlName="phoneNumber">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput
+             placeholder="Email для связи"
+             formControlName="email">
+    </mat-form-field>
+  </form>
+
+  <button mat-raised-button
+          color="primary"
+          (click)="updateProfile()">
+    Сохранить профиль
+  </button>
+
+</div>

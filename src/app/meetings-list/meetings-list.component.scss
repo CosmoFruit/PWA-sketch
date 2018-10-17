@@ -1,0 +1,23 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.meetings-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.meeting-snippet {
+  margin: 0 1rem 1rem;
+  display: block;
+}
+
+.empty {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  opacity: 0.5;
+}

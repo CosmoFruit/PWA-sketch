@@ -1,9 +1,9 @@
 import { NgModule }              from '@angular/core';
-import { Routes, RouterModule }  from '@angular/router';
-import { AppComponent }          from './app.component';
+import { RouterModule, Routes }  from '@angular/router';
 import { MeetingsListComponent } from './meetings-list/meetings-list.component';
 import { MeetingInfoComponent }  from './meeting-info/meeting-info.component';
 import { UserProfileComponent }  from './user-profile/user-profile.component';
+import { MeetingAddComponent }   from './meeting-add/meeting-add.component';
 
 const routes: Routes = [
   {
@@ -15,13 +15,19 @@ const routes: Routes = [
     component: UserProfileComponent,
   },
   {
-    path: ':id',
+    path: 'meeting/add',
+    component: MeetingAddComponent,
+  },
+  {
+    path: 'meeting/:id',
     component: MeetingInfoComponent,
   },
 ];
 
+
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [ RouterModule.forRoot(routes) ],
+  exports: [ RouterModule ],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

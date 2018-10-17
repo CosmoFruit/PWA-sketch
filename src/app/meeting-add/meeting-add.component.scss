@@ -1,0 +1,22 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.row, .col1 {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.row {
+  justify-content: center;
+}
+
+.col1{
+  flex-direction: column;
+  width: 1000%;
+  min-width: 320px;
+  max-width: 600px;
+  margin: 1rem 0.5rem;
+  justify-content: flex-start;
+}
