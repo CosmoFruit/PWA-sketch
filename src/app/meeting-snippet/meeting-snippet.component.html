@@ -2,22 +2,44 @@
   <mat-card-title> {{ item.time}}</mat-card-title>
   <mat-card-subtitle>{{ item.city}}, {{ item.address}} </mat-card-subtitle>
   <mat-card-content>
-    <p>Организатор: {{ item.author.displayName }}</p>
-    <button mat-raised-button>
+    <p>
+      Организатор: {{ item.author.displayName }}
+      <span *ngIf="isAuthor">
+        (Вы)
+      </span>
+    </p>
+    <button mat-raised-button
+            *ngIf="isMember && !isAuthor">
       <mat-icon>phone</mat-icon>
       Показать номер для связи
     </button>
     <p>Количество комплектов на встрече: {{ item.gameKitsCount }}</p>
-    <p>Участники: {{ item.members.length }} </p>
+    <p>Участников: {{ item.members.length + 1 }} </p>
     <p>Комментарий организатора: {{ item.comment }}</p>
   </mat-card-content>
 
   <mat-card-actions>
-    <button mat-raised-button
-            color="primary">Прийду</button>
+    <ng-container *ngIf="isAuthor; else NotOwner">
+      <button mat-raised-button>Редактировать</button>
+      <button mat-raised-button
+              color="warn">Отменить</button>
+    </ng-container>
+
+    <ng-template #NotOwner>
+      <button mat-raised-button
+              color="primary">Прийду</button>
+    </ng-template>
   </mat-card-actions>
 
   <mat-card-footer>
-
+      <div class="members-list">
+        Участники:
+        <span>
+          {{ item.author.displayName}}<span *ngIf="item.members.length">,</span>
+        </span>
+        <span *ngFor="let member of item.members; let last = last">
+          {{ member.displayName }} <span *ngIf="!last">,</span>
+        </span>
+      </div>
   </mat-card-footer>
 </mat-card>

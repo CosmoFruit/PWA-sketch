@@ -17,6 +17,11 @@ import { MeetingInfoComponent }             from './meeting-info/meeting-info.co
 import { MeetingSnippetComponent }          from './meeting-snippet/meeting-snippet.component';
 import { MeetingsListComponent }            from './meetings-list/meetings-list.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SpinnerComponent }                 from './spinner/spinner.component';
+import { HttpClientModule }                 from '@angular/common/http';
+import { NgProgressModule }                 from '@ngx-progressbar/core';
+import { NgProgressHttpModule }             from '@ngx-progressbar/http';
+import { LoginFormComponent } from './login-form/login-form.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +31,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MeetingInfoComponent,
     MeetingSnippetComponent,
     MeetingsListComponent,
+    SpinnerComponent,
+    LoginFormComponent,
+  ],
+  entryComponents: [
+    LoginFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,6 +43,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
+    HttpClientModule,
+    NgProgressModule.forRoot(),
+    NgProgressHttpModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     MaterialModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),

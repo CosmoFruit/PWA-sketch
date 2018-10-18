@@ -1,17 +1,33 @@
-<div class="page-container">
-  <div class="meetings-list"
-       *ngIf="(items$ | async)?.length; else EmptyList">
-    <app-meeting-snippet class="meeting-snippet"
-                         *ngFor="let data of (items$ | async)"
-                         [item]="data"></app-meeting-snippet>
+<div class="empty" *ngIf="loading; else IsLoaded">
+  <div class="spinner">
+    <div class="spinner-circle spinner-circle-outer"></div>
+    <div class="spinner-circle-off spinner-circle-inner"></div>
+    <div class="spinner-circle spinner-circle-single-1"></div>
+    <div class="spinner-circle spinner-circle-single-2"></div>
   </div>
-
-  <ng-template #EmptyList>
-    <div class="empty">
-      <p>Встреч не запланировано.</p>
-      <a routerLink="/meeting/add">
-        Вы можете создать новую встречу
-      </a>
-    </div>
-  </ng-template>
+  <div class="text">...Загрузка...</div>
 </div>
+
+<ng-template #IsLoaded>
+  <div class="page-container"
+       *ngIf="(items$ | async)?.length; else EmptyList">
+    <div class="meetings-list"
+         *ngIf="{
+           items: items$ | async
+         } as data">
+      <app-meeting-snippet class="meeting-snippet"
+                             *ngFor="let meeting of data.items"
+                             [item]="meeting"
+                             [user]="person"></app-meeting-snippet>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #EmptyList>
+  <div class="empty">
+    <p>Встреч не запланировано.</p>
+    <a routerLink="/meeting/add">
+      Вы можете создать новую встречу
+    </a>
+  </div>
+</ng-template>

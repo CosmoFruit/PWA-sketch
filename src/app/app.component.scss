@@ -30,20 +30,22 @@ h1.example-app-name {
   flex: 1 0 auto;
 }
 
-.example-toolbar,
-.user {
+.example-toolbar {
   display: flex;
   justify-content: space-between;
 }
 
-.user {
-  p {
-    margin: 0;
-  }
+.userName {
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  height: 3rem;
+}
 
-  button {
-    margin-left:  1rem;
-  }
+.exitBtn {
+  width: 100%;
+  position: absolute;
+  bottom: 3rem;
 }
 
 .container {

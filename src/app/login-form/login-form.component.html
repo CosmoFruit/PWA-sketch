@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>Авторизация</h2>
+<mat-dialog-content>
+
+    <mat-form-field>
+      <input matInput
+             type="phone"
+             placeholder="Номер телефона"
+             [(ngModel)]="phone"
+             [disabled]="isSMSed"
+      >
+    </mat-form-field>
+    <button mat-button
+            [disabled]="isSMSed"
+            (click)="sendSMS()">
+      Получить смс
+    </button>
+
+    <div class="sms-hint" *ngIf="isSMSed">
+      Смс отправлено и должно прийти в течении 3 минут
+    </div>
+
+    <mat-form-field>
+      <input matInput placeholder="Код из смс"
+             [(ngModel)]="code"
+             [disabled]="!isSMSed">
+    </mat-form-field>
+    <button mat-button
+            [disabled]="!isSMSed"
+            (click)="verifyLogin()">
+      Войти
+    </button>
+
+</mat-dialog-content>

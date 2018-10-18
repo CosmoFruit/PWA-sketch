@@ -1,83 +1,101 @@
-<div class="example-container"
-     [class.example-is-mobile]="mobileQuery.matches">
-  <div id="sign-in-button"></div>
-  <mat-toolbar color="primary"
-               class="example-toolbar">
-    <button mat-icon-button
-            *ngIf="mobileQuery.matches"
-            (click)="snav.toggle()">
-      <mat-icon>menu</mat-icon>
-    </button>
+<ng-progress></ng-progress>
 
-    <h1 class="example-app-name">Встречи & Weiqi</h1>
+<div id="recaptcha-container"></div>
 
-    <div class="user"
-         *ngIf="(user$ | async) as user; else IsLogOut">
-      <p>{{ user.displayName }}</p>
-      <button mat-flat-button
-              (click)="logout()">
-        <mat-icon>exit_to_app</mat-icon>
-        <span>Выйти</span>
+<app-spinner *ngIf="loading; else App"
+             class="empty"></app-spinner>
+
+<ng-template #App>
+  <div class="example-container"
+       [class.example-is-mobile]="mobileQuery.matches">
+    <mat-toolbar color="primary"
+                 class="example-toolbar">
+      <button mat-icon-button
+              *ngIf="mobileQuery.matches"
+              (click)="snav.toggle()">
+        <mat-icon>menu</mat-icon>
       </button>
-    </div>
 
-    <ng-template #IsLogOut>
+      <h1 class="example-app-name">Встречи & Weiqi</h1>
+
       <button mat-flat-button
-              (click)="login()">
+              *ngIf="!(user$ | async)"
+              (click)="openLoginDialog()">
         <mat-icon>account_box</mat-icon>
         <span>Войти</span>
       </button>
-    </ng-template>
-  </mat-toolbar>
+    </mat-toolbar>
 
-  <mat-sidenav-container class="example-sidenav-container"
-                         [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
-    <mat-sidenav #snav
-                 [opened]="!mobileQuery.matches"
-                 [mode]="mobileQuery.matches ? 'over' : 'side'"
-                 [fixedInViewport]="mobileQuery.matches"
-                 fixedTopGap="56">
-      <mat-nav-list>
-        <a mat-list-item
-           routerLink="/"
-           [routerLinkActive]="'active'">
-          Будущие
-        </a>
-        <a mat-list-item
-           routerLink="/"
-           [queryParams]="{ filter: 'old' }"
-           [routerLinkActive]="'active'">
-          Прошедшие
-        </a>
+    <mat-sidenav-container class="example-sidenav-container"
+                           [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+      <mat-sidenav #snav
+                   [opened]="!mobileQuery.matches"
+                   [mode]="mobileQuery.matches ? 'over' : 'side'"
+                   [fixedInViewport]="mobileQuery.matches"
+                   fixedTopGap="56">
+        <mat-nav-list>
+          <ng-container *ngIf="(user$ | async) as user">
+            <div class="userName">
+              <mat-icon>account_circle</mat-icon>
+              {{ user.displayName }}
+            </div>
 
-        <a mat-list-item
-           routerLink="/"
-           [queryParams]="{ filter: 'me' }"
-           [routerLinkActive]="'active'">
-          Мои
-        </a>
+            <mat-divider></mat-divider>
+          </ng-container>
 
-        <mat-divider></mat-divider>
+          <a mat-list-item
+             routerLink="/"
+             [routerLinkActive]="'active'">
+            Будущие
+          </a>
+          <a mat-list-item
+             routerLink="/"
+             [queryParams]="{ filter: 'old' }"
+             [routerLinkActive]="'active'">
+            Прошедшие
+          </a>
 
-        <a mat-list-item
-           routerLink="/meeting/add"
-           [routerLinkActive]="'active'">
-          Создать встречу
-        </a>
+          <a mat-list-item
+             *ngIf="(user$ | async)"
+             routerLink="/"
+             [queryParams]="{ filter: 'me' }"
+             [routerLinkActive]="'active'">
+            Мои
+          </a>
 
-        <mat-divider></mat-divider>
+          <mat-divider></mat-divider>
 
-        <a mat-list-item
-           routerLink="/user"
-           [routerLinkActive]="'active'">
-          Настройки
-        </a>
-      </mat-nav-list>
-    </mat-sidenav>
+          <a mat-list-item
+             routerLink="/meeting/add"
+             [routerLinkActive]="'active'">
+            Создать встречу
+          </a>
 
-    <mat-sidenav-content class="container">
-      <router-outlet></router-outlet>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-</div>
+          <mat-divider></mat-divider>
+
+          <a mat-list-item
+             *ngIf="(user$ | async)"
+             routerLink="/user"
+             [routerLinkActive]="'active'">
+            Настройки
+          </a>
+        </mat-nav-list>
+
+        <button class="exitBtn"
+                *ngIf="(user$ | async)"
+                mat-flat-button
+                (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Выйти</span>
+        </button>
+      </mat-sidenav>
+
+      <mat-sidenav-content class="container">
+        <router-outlet></router-outlet>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>
+</ng-template>
+
+
 

@@ -1,5 +1,7 @@
-import { Injectable }      from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { Injectable }           from '@angular/core';
+import { AngularFireAuth }      from '@angular/fire/auth';
+import { from, Observable, of } from 'rxjs';
+import { switchMap, tap }       from 'rxjs/operators';
 
 
 @Injectable({
@@ -13,30 +15,21 @@ export class AuthService {
 
   private confirmationResult;
 
-  login(phone: string, appVerifier) {
-    this.afAuth.auth.signInWithPhoneNumber(phone, appVerifier)
-      .then((res) => {
-        console.log(res);
+  login(phone: string, appVerifier): Observable<any> {
+    return of(1).pipe(
+      switchMap(() => from(this.afAuth.auth.signInWithPhoneNumber(phone, appVerifier))),
+      tap(res => {
         this.confirmationResult = res;
-      })
-      .catch((error) => {
-        // Error; SMS not sent
-        // ...
-        console.log(error);
-      });
+      }),
+    );
   }
 
-  confirmLogin(sign) {
-    this.confirmationResult.confirm(sign)
-      .then((result) => {
-        // User signed in successfully.
-        console.log(result.user);
-        // ...
-      }).catch((error) => {
-      // User couldn't sign in (bad verification code?)
-      // ...
-      console.log(error);
-    });
+  confirmLogin(sign): Observable<any> {
+    return of(1).pipe(
+      switchMap(() =>
+        from(this.confirmationResult.confirm(sign))
+      ),
+    );
   }
 
   logout() {

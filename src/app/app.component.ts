@@ -2,9 +2,12 @@ import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '
 import { MediaMatcher }                                                   from '@angular/cdk/layout';
 import { Observable }                                                     from 'rxjs';
 import * as firebase                                                      from 'firebase/app';
-import { MeetingService }                                                 from './services/meeting.service';
-import { UserService }                                                    from './services/user.service';
-import { AuthService }                                                    from './services/auth.service';
+import { MeetingService }     from './services/meeting.service';
+import { UserService }        from './services/user.service';
+import { AuthService }        from './services/auth.service';
+import { shareReplay }        from 'rxjs/operators';
+import { MatDialog }          from '@angular/material';
+import { LoginFormComponent } from './login-form/login-form.component';
 
 
 @Component({
@@ -19,7 +22,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(changeDetectorRef: ChangeDetectorRef,
               media: MediaMatcher,
-
+              private _dialog: MatDialog,
+              private _authService: AuthService,
               private _userService: UserService, ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -27,16 +31,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
 
-  user$ = this._userService.user$;
+  user$ = this._userService.user$.pipe(shareReplay(1));
+  loading = true;
 
   appVerifier;
 
   ngOnInit() {
-
+    this.user$.subscribe( () => this.loading = false);
   }
 
   ngAfterViewInit() {
-    this.appVerifier = new firebase.auth.RecaptchaVerifier('sign-in-button', {
+    this.appVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
       'size': 'invisible',
     });
   }
@@ -45,11 +50,18 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 
-  login() {
+  openLoginDialog(): void {
+    const dialogRef = this._dialog.open(LoginFormComponent, {
+      width: '320px',
+      data: { appVerifier: this.appVerifier }
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The login dialog was closed');
+    });
   }
 
   logout() {
-
+    this._authService.logout();
   }
 }
