@@ -1,18 +1,31 @@
-<h2 mat-dialog-title>Авторизация</h2>
+<h2 mat-dialog-title>
+  {{ data.title || 'Авторизация'}}
+</h2>
+
 <mat-dialog-content>
 
     <mat-form-field>
       <input matInput
-             type="phone"
+             type="text"
              placeholder="Номер телефона"
-             [(ngModel)]="phone"
-             [disabled]="isSMSed"
-      >
+             prefix="+7 "
+             mask="(000) 000 00 00"
+             [formControl]="phone"
+             (keyup.enter)="sendSMS()" >
+      <mat-error *ngIf="phone.invalid">
+        Заполните номер +7 (ХХХ) ХХХ ХХ ХХ
+      </mat-error>
     </mat-form-field>
+
     <button mat-button
-            [disabled]="isSMSed"
+            class="button-sms"
+            [disabled]="isSMSed || isSMSing"
             (click)="sendSMS()">
-      Получить смс
+      <ng-container [ngSwitch]="isSMSing">
+        <span *ngSwitchCase="false">Получить смс</span>
+        <div class="cssload-clock"
+             *ngSwitchCase="true"></div>
+      </ng-container>
     </button>
 
     <div class="sms-hint" *ngIf="isSMSed">
@@ -20,14 +33,26 @@
     </div>
 
     <mat-form-field>
-      <input matInput placeholder="Код из смс"
-             [(ngModel)]="code"
-             [disabled]="!isSMSed">
+      <input matInput
+             #codeInput
+             placeholder="Код из смс"
+             [formControl]="code"
+             mask="000 000"
+             (keyup.enter)="verifyLogin()" >
+      <mat-error *ngIf="code.invalid">
+        Неверный код
+      </mat-error>
     </mat-form-field>
+
     <button mat-button
-            [disabled]="!isSMSed"
+            class="button-sms"
+            [disabled]="!isSMSed || isVerifiengCode"
             (click)="verifyLogin()">
-      Войти
+      <ng-container [ngSwitch]="isVerifiengCode">
+        <span *ngSwitchCase="false">Войти</span>
+        <div class="cssload-clock"
+             *ngSwitchCase="true"></div>
+      </ng-container>
     </button>
 
 </mat-dialog-content>

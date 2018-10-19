@@ -1,13 +1,12 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { MediaMatcher }                                                   from '@angular/cdk/layout';
-import { Observable }                                                     from 'rxjs';
-import * as firebase                                                      from 'firebase/app';
-import { MeetingService }     from './services/meeting.service';
-import { UserService }        from './services/user.service';
-import { AuthService }        from './services/auth.service';
-import { shareReplay }        from 'rxjs/operators';
-import { MatDialog }          from '@angular/material';
-import { LoginFormComponent } from './login-form/login-form.component';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit }      from '@angular/core';
+import { MediaMatcher }                                                        from '@angular/cdk/layout';
+import * as firebase                                                           from 'firebase/app';
+import { UserService }                                                         from './services/user.service';
+import { AuthService }                                                         from './services/auth.service';
+import { shareReplay }                                                         from 'rxjs/operators';
+import { MatDialog }                                                           from '@angular/material';
+import { LoginFormComponent }                                                  from './login-form/login-form.component';
+import { DialogEventInitState, EdialogEventType, IdialogEvent, NotifyService } from './services/notify.service';
 
 
 @Component({
@@ -24,12 +23,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
               media: MediaMatcher,
               private _dialog: MatDialog,
               private _authService: AuthService,
-              private _userService: UserService, ) {
+              private _msgService: NotifyService,
+              private _userService: UserService) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
   }
-
 
   user$ = this._userService.user$.pipe(shareReplay(1));
   loading = true;
@@ -37,7 +36,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   appVerifier;
 
   ngOnInit() {
-    this.user$.subscribe( () => this.loading = false);
+    this.user$.subscribe((res) => {
+      console.log(res);
+      this.loading = false;
+    });
+    this._msgService.snackBarMsg$.subscribe();
+    this._msgService.dialogEvent$.subscribe((event: IdialogEvent) => {
+      if (event.type === EdialogEventType.OPEN_LOGIN) {
+        this.openLoginDialog(event.text);
+        this._msgService.sendDialogEvent(new DialogEventInitState);
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -50,10 +59,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 
-  openLoginDialog(): void {
+  openLoginDialog(text?: string): void {
     const dialogRef = this._dialog.open(LoginFormComponent, {
       width: '320px',
-      data: { appVerifier: this.appVerifier }
+      data: {
+        appVerifier: this.appVerifier,
+        title: text,
+      },
     });
 
     dialogRef.afterClosed().subscribe(result => {

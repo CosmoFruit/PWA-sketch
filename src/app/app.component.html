@@ -1,9 +1,13 @@
-<ng-progress></ng-progress>
-
 <div id="recaptcha-container"></div>
 
-<app-spinner *ngIf="loading; else App"
-             class="empty"></app-spinner>
+<div *ngIf="loading; else App"
+     class="empty">
+  <app-spinner></app-spinner>
+  <h3>
+    Встречи & Weiqi
+  </h3>
+</div>
+
 
 <ng-template #App>
   <div class="example-container"
@@ -37,7 +41,7 @@
           <ng-container *ngIf="(user$ | async) as user">
             <div class="userName">
               <mat-icon>account_circle</mat-icon>
-              {{ user.displayName }}
+              {{ (user.displayName && user.displayName !== ' ') ? user.displayName : user.phoneNumber }}
             </div>
 
             <mat-divider></mat-divider>
@@ -55,13 +59,13 @@
             Прошедшие
           </a>
 
-          <a mat-list-item
-             *ngIf="(user$ | async)"
-             routerLink="/"
-             [queryParams]="{ filter: 'me' }"
-             [routerLinkActive]="'active'">
-            Мои
-          </a>
+          <!--<a mat-list-item-->
+             <!--*ngIf="(user$ | async)"-->
+             <!--routerLink="/"-->
+             <!--[queryParams]="{ filter: 'me' }"-->
+             <!--[routerLinkActive]="'active'">-->
+            <!--Мои-->
+          <!--</a>-->
 
           <mat-divider></mat-divider>
 

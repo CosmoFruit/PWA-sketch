@@ -1,18 +1,28 @@
 <mat-card>
   <mat-card-title> {{ item.time}}</mat-card-title>
-  <mat-card-subtitle>{{ item.city}}, {{ item.address}} </mat-card-subtitle>
+  <mat-card-subtitle>{{ item.city}}, {{ item.address}}</mat-card-subtitle>
   <mat-card-content>
     <p>
-      Организатор: {{ item.author.displayName }}
+      Организатор:
+      <span *ngIf="!isAuthor">
+        {{( item.author.displayName && item.author.displayName  !== ' ')? item.author.displayName : "Anonymous"}}
+      </span>
+
       <span *ngIf="isAuthor">
         (Вы)
       </span>
     </p>
+
+    <p *ngIf="isGetPhonenumber">
+      Тел. для связи: {{ phoneNumber }}
+    </p>
     <button mat-raised-button
-            *ngIf="isMember && !isAuthor">
+            *ngIf="isMember && !isAuthor && !isGetPhonenumber"
+            (click)="getPhoneNumber()">
       <mat-icon>phone</mat-icon>
       Показать номер для связи
     </button>
+
     <p>Количество комплектов на встрече: {{ item.gameKitsCount }}</p>
     <p>Участников: {{ item.members.length + 1 }} </p>
     <p>Комментарий организатора: {{ item.comment }}</p>
@@ -20,26 +30,42 @@
 
   <mat-card-actions>
     <ng-container *ngIf="isAuthor; else NotOwner">
-      <button mat-raised-button>Редактировать</button>
+      <!--<button mat-raised-button>Редактировать</button>-->
       <button mat-raised-button
-              color="warn">Отменить</button>
+              color="warn"
+              (click)="cancelMeeting()">
+        Отменить
+      </button>
     </ng-container>
 
     <ng-template #NotOwner>
-      <button mat-raised-button
-              color="primary">Прийду</button>
+      <button *ngIf="!isMember"
+              mat-raised-button
+              color="primary"
+              (click)="getInviteOnMeeting()">
+        Прийду
+      </button>
+
+      <button *ngIf="isMember"
+              mat-raised-button
+              color="warn"
+              (click)="deleteInviteOnMeeting()">
+        Не прийду
+      </button>
     </ng-template>
+
+
   </mat-card-actions>
 
   <mat-card-footer>
-      <div class="members-list">
-        Участники:
-        <span>
-          {{ item.author.displayName}}<span *ngIf="item.members.length">,</span>
+    <div class="members-list">
+      Участники:
+      <span>
+         {{( item.author.displayName && item.author.displayName  !== ' ')? item.author.displayName : "Anonymous"}}<span *ngIf="item.members.length">,</span>
         </span>
-        <span *ngFor="let member of item.members; let last = last">
-          {{ member.displayName }} <span *ngIf="!last">,</span>
-        </span>
-      </div>
+      <span *ngFor="let member of item.members; let last = last">
+          {{(member.displayName && member.displayName  !== ' ')? member.displayName : "Anonymous"}} <span *ngIf="!last">,</span>
+      </span>
+    </div>
   </mat-card-footer>
 </mat-card>

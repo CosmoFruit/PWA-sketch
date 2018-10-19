@@ -37,8 +37,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         filter(x => !!x),
       )
       .subscribe(data => this.userForm.patchValue({
-          firstName: data.displayName.split(' ')[ 0 ],
-          lastName: data.displayName.split(' ')[ 1 ],
+          firstName: data.displayName ? data.displayName.split(' ')[ 0 ] : '',
+          lastName: data.displayName ? data.displayName.split(' ')[ 1 ] : '',
           phoneNumber: data.phoneNumber,
           email: data.email,
         }),

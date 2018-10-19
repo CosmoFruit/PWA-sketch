@@ -4,6 +4,7 @@ import { MeetingsListComponent } from './meetings-list/meetings-list.component';
 import { MeetingInfoComponent }  from './meeting-info/meeting-info.component';
 import { UserProfileComponent }  from './user-profile/user-profile.component';
 import { MeetingAddComponent }   from './meeting-add/meeting-add.component';
+import { MeetingAddPageGuard }   from './services/meeting-add-page.guard';
 
 const routes: Routes = [
   {
@@ -17,6 +18,7 @@ const routes: Routes = [
   {
     path: 'meeting/add',
     component: MeetingAddComponent,
+    canActivate: [ MeetingAddPageGuard ],
   },
   {
     path: 'meeting/:id',

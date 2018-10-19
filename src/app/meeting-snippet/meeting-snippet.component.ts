@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { IMeeting }                            from '../services/meeting.service';
-import { IUser }                               from '../services/user.service';
+import { IMeeting, MeetingService }            from '../services/meeting.service';
+import { IUser, UserService }                  from '../services/user.service';
+import { EdialogEventType, NotifyService }     from '../services/notify.service';
 
 
 @Component({
@@ -16,14 +17,20 @@ export class MeetingSnippetComponent implements OnInit, OnChanges {
 
   isMember = false;
   isAuthor = false;
+  isGetPhonenumber = false;
 
-  constructor() {}
+  phoneNumber = '';
+
+  constructor(private _msgService: NotifyService,
+              private _userService: UserService,
+              private _dataService: MeetingService) {
+  }
 
   ngOnInit() {
 
   }
 
-  ngOnChanges () {
+  ngOnChanges() {
     if (this.user) {
       if (this.item.members.some(x => x.uid === this.user.uid)) {
         this.isMember = true;
@@ -40,5 +47,56 @@ export class MeetingSnippetComponent implements OnInit, OnChanges {
       this.isMember = false;
       this.isAuthor = false;
     }
+  }
+
+  cancelMeeting() {
+
+  }
+
+  getPhoneNumber() {
+    this._userService.getUserbyUid(this.item.author).subscribe(
+      res => {
+        this.phoneNumber = res.phoneNumber;
+        this.isGetPhonenumber = true;
+        console.log(res);
+      },
+      err => console.log(err),
+    );
+  }
+
+  getInviteOnMeeting() {
+    if (this.user) {
+
+      console.log(this.item);
+
+      this._dataService.updateMeeting({
+        ...this.item,
+        members: this.item.members.concat({
+          uid: this.user.uid,
+          displayName: this.user.displayName,
+          photoURL: this.user.photoURL,
+          gameKitsCount: 0,
+          comment: '',
+        }),
+      }).subscribe(
+        res => console.log(res),
+        err => console.log(err),
+      );
+    } else {
+      this._msgService.sendDialogEvent({
+        type: EdialogEventType.OPEN_LOGIN,
+        text: `Для участия во встречи пожалуйста авторизуйтесь`,
+      });
+    }
+  }
+
+  deleteInviteOnMeeting() {
+    this._dataService.updateMeeting({
+      ...this.item,
+      members: this.item.members.filter(p => p.uid !== this.user.uid),
+    }).subscribe(
+      res => console.log(res),
+      err => console.log(err),
+    );
   }
 }
