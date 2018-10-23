@@ -2,6 +2,7 @@ import { Injectable }           from '@angular/core';
 import { AngularFireAuth }      from '@angular/fire/auth';
 import { from, Observable, of } from 'rxjs';
 import { switchMap, tap }       from 'rxjs/operators';
+import { Router }               from '@angular/router';
 
 
 @Injectable({
@@ -9,7 +10,8 @@ import { switchMap, tap }       from 'rxjs/operators';
 })
 export class AuthService {
 
-  constructor(private afAuth: AngularFireAuth) {
+  constructor(private afAuth: AngularFireAuth,
+              private router: Router, ) {
     this.afAuth.auth.useDeviceLanguage();
   }
 
@@ -36,6 +38,7 @@ export class AuthService {
     this.afAuth.auth.signOut().then(() => {
       // Sign-out successful.
       console.log('Sign-out successful');
+      this.router.navigate(['/']);
     }).catch((error) => {
       // An error happened.
       console.log(error);

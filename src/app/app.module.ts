@@ -1,5 +1,5 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule }      from '@angular/core';
+import { BrowserModule }       from '@angular/platform-browser';
+import { LOCALE_ID, NgModule } from '@angular/core';
 
 import { AppRoutingModule }                 from './app-routing.module';
 import { AppComponent }                     from './app.component';
@@ -21,6 +21,10 @@ import { SpinnerComponent }                 from './spinner/spinner.component';
 import { LoginFormComponent }               from './login-form/login-form.component';
 import { NgxMaskModule }                    from 'ngx-mask';
 import { TextMaskModule }                   from 'angular2-text-mask';
+import { registerLocaleData }               from '@angular/common';
+import localeRu                             from '@angular/common/locales/ru';
+
+registerLocaleData(localeRu, 'ru');
 
 
 @NgModule({
@@ -51,7 +55,13 @@ import { TextMaskModule }                   from 'angular2-text-mask';
     NgxMaskModule.forRoot(),
     TextMaskModule,
   ],
-  providers: [ AngularFirestore ],
+  providers: [
+    AngularFirestore,
+    {
+      provide: LOCALE_ID,
+      useValue: 'ru',
+    },
+  ],
   bootstrap: [ AppComponent ],
 })
 export class AppModule {

@@ -18,6 +18,7 @@ export class MeetingSnippetComponent implements OnInit, OnChanges {
   isMember = false;
   isAuthor = false;
   isGetPhonenumber = false;
+  isAhead = false;
 
   phoneNumber = '';
 
@@ -27,9 +28,10 @@ export class MeetingSnippetComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-
+    console.log(this.item);
   }
 
+  
   ngOnChanges() {
     if (this.user) {
       if (this.item.members.some(x => x.uid === this.user.uid)) {
@@ -49,8 +51,24 @@ export class MeetingSnippetComponent implements OnInit, OnChanges {
     }
   }
 
-  cancelMeeting() {
+  rerunMeeting() {
+    this._dataService.updateMeeting({
+      id: this.item.id,
+      isCanceled: false
+    }).subscribe(
+      res => console.log(res),
+      err => console.log(err),
+    );
+  }
 
+  cancelMeeting() {
+    this._dataService.updateMeeting({
+      id: this.item.id,
+      isCanceled: true
+    }).subscribe(
+      res => console.log(res),
+      err => console.log(err),
+    );
   }
 
   getPhoneNumber() {
@@ -70,7 +88,7 @@ export class MeetingSnippetComponent implements OnInit, OnChanges {
       console.log(this.item);
 
       this._dataService.updateMeeting({
-        ...this.item,
+        id: this.item.id,
         members: this.item.members.concat({
           uid: this.user.uid,
           displayName: this.user.displayName,
@@ -92,7 +110,7 @@ export class MeetingSnippetComponent implements OnInit, OnChanges {
 
   deleteInviteOnMeeting() {
     this._dataService.updateMeeting({
-      ...this.item,
+      id: this.item.id,
       members: this.item.members.filter(p => p.uid !== this.user.uid),
     }).subscribe(
       res => console.log(res),

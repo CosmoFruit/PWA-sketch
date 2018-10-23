@@ -22,13 +22,23 @@
 
       <mat-form-field>
         <input matInput
-               placeholder="Адрес встречи"
+               placeholder="Адрес"
                formControlName="address">
       </mat-form-field>
 
       <mat-form-field>
         <input matInput
-               placeholder="Время встречи"
+               placeholder="Дата: DD/MM"
+               mask="00/00"
+               [dropSpecialCharacters]="false"
+               formControlName="date">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput
+               placeholder="Время: HH:mm"
+               mask="00:00"
+               [dropSpecialCharacters]="false"
                formControlName="time">
       </mat-form-field>
 

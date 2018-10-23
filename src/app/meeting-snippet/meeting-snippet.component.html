@@ -1,5 +1,9 @@
 <mat-card>
-  <mat-card-title> {{ item.time}}</mat-card-title>
+  <mat-card-title>
+    {{ item.timeStamp | date: 'EEEE, d MMMM' }}
+    <br>
+    {{ item.timeStamp | date: 'h:mm' }}
+  </mat-card-title>
   <mat-card-subtitle>{{ item.city}}, {{ item.address}}</mat-card-subtitle>
   <mat-card-content>
     <p>
@@ -17,7 +21,7 @@
       Тел. для связи: {{ phoneNumber }}
     </p>
     <button mat-raised-button
-            *ngIf="isMember && !isAuthor && !isGetPhonenumber"
+            *ngIf="isMember && !isAuthor && !isGetPhonenumber && item.isAhead"
             (click)="getPhoneNumber()">
       <mat-icon>phone</mat-icon>
       Показать номер для связи
@@ -26,27 +30,51 @@
     <p>Количество комплектов на встрече: {{ item.gameKitsCount }}</p>
     <p>Участников: {{ item.members.length + 1 }} </p>
     <p>Комментарий организатора: {{ item.comment }}</p>
+
+    <div class="canceled-overlay"
+         *ngIf="item.isCanceled">
+      <mat-icon
+        class="meeting-alert">
+        warning
+      </mat-icon>
+      Встреча {{ item.isAhead ? 'отменена' : 'была отменена'}}
+    </div>
+
+    <div class="past-overlay"
+         *ngIf="!item.isAhead && !item.isCanceled">
+      <mat-icon>
+        check_circle_outline
+      </mat-icon>
+      Встреча прошла
+    </div>
   </mat-card-content>
 
   <mat-card-actions>
     <ng-container *ngIf="isAuthor; else NotOwner">
       <!--<button mat-raised-button>Редактировать</button>-->
       <button mat-raised-button
+              *ngIf="!item.isCanceled && item.isAhead"
               color="warn"
               (click)="cancelMeeting()">
         Отменить
       </button>
+      <button mat-raised-button
+              *ngIf="item.isCanceled && item.isAhead"
+              color="accent"
+              (click)="rerunMeeting()">
+        Возобновить
+      </button>
     </ng-container>
 
     <ng-template #NotOwner>
-      <button *ngIf="!isMember"
+      <button *ngIf="!isMember && !item.isCanceled && item.isAhead"
               mat-raised-button
               color="primary"
               (click)="getInviteOnMeeting()">
         Прийду
       </button>
 
-      <button *ngIf="isMember"
+      <button *ngIf="isMember && !item.isCanceled && item.isAhead"
               mat-raised-button
               color="warn"
               (click)="deleteInviteOnMeeting()">
@@ -61,7 +89,8 @@
     <div class="members-list">
       Участники:
       <span>
-         {{( item.author.displayName && item.author.displayName  !== ' ')? item.author.displayName : "Anonymous"}}<span *ngIf="item.members.length">,</span>
+         {{( item.author.displayName && item.author.displayName  !== ' ')? item.author.displayName : "Anonymous"}}<span
+        *ngIf="item.members.length">,</span>
         </span>
       <span *ngFor="let member of item.members; let last = last">
           {{(member.displayName && member.displayName  !== ' ')? member.displayName : "Anonymous"}} <span *ngIf="!last">,</span>

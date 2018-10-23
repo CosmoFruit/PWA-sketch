@@ -9,7 +9,9 @@ import { Router }                                   from '@angular/router';
 export class Meeting implements IMeeting {
   city = '';
   address = '';
-  time;
+  date = '';
+  time = '';
+  timeStamp = null;
   gameKitsCount = 0;
   comment = '';
   members: IMeetingMember[] = [];
@@ -18,6 +20,7 @@ export class Meeting implements IMeeting {
     displayName: '',
     photoURL: '',
   };
+  isCanceled = false;
 
   constructor(value) {
     Object.assign(this, value);
@@ -43,10 +46,11 @@ export class MeetingAddComponent implements OnInit {
           disabled: true,
         },
       ],
-      address: [ 'парк Сосновка', Validators.required ],
-      time: [ 'четверг 25.10 в 12:30', Validators.required ],
+      address: [ '', Validators.required ],
+      date: [ '', Validators.required ],
+      time: [ '', Validators.required ],
       gameKitsCount: [ '1', Validators.required ],
-      comment: [ 'тест, приходить ненадо' ],
+      comment: [ '' ],
     });
   }
 
@@ -58,9 +62,36 @@ export class MeetingAddComponent implements OnInit {
   }
 
   submit() {
+    if(this.meetingForm.invalid) {
+      return;
+    }
+
     const data: IMeeting = new Meeting(this.meetingForm.getRawValue());
 
     const user = this._usetService.getUserInfo();
+
+    const currTime = new Date();
+    const eventDate = data.date.split('/');
+    const eventTime = data.time.split(':');
+
+    let eventYear = currTime.getFullYear();
+
+    console.log(currTime.getMonth());
+    console.log(+eventDate[1] - 1);
+    console.log(currTime.getDate());
+    console.log(+eventDate[0]);
+
+    if ((+eventDate[1] - 1) < currTime.getMonth()) {
+      eventYear += 1;
+    } else if (
+      ((+eventDate[1] - 1) === currTime.getMonth())
+      &&
+      ((+eventDate[0]) < currTime.getDate())
+    ) {
+      eventYear += 1;
+    }
+
+    data.timeStamp = new Date(eventYear, +eventDate[1] - 1, +eventDate[0], +eventTime[0], +eventTime[1]);
 
     data.author.uid = user.uid;
     data.author.displayName = user.displayName;

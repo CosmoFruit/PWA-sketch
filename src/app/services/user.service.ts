@@ -9,8 +9,8 @@ import { IMeeting }             from './meeting.service';
 export interface IUser {
   uid?: string | null;
   isOnline?: boolean;
-  displayName: string | null;
-  photoURL: string | null;
+  displayName?: string | null;
+  photoURL?: string | null;
 }
 
 
